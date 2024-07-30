@@ -3,6 +3,7 @@ package controller
 import (
 	"os"
 
+	appv1apha1 "github.com/bfoley13/appcontroller/api/v1alpha1"
 	"github.com/go-logr/logr"
 	cfgv1alpha2 "github.com/openservicemesh/osm/pkg/apis/config/v1alpha2"
 	policyv1alpha1 "github.com/openservicemesh/osm/pkg/apis/policy/v1alpha1"
@@ -42,7 +43,7 @@ func getLogger(opts ...zap.Opts) logr.Logger {
 
 func registerSchemes(s *runtime.Scheme) {
 	utilruntime.Must(clientgoscheme.AddToScheme(s))
-	utilruntime.Must(appv1.AddToScheme(s))
+	utilruntime.Must(appv1apha1.AddToScheme(s))
 	utilruntime.Must(secv1.Install(s))
 	utilruntime.Must(cfgv1alpha2.AddToScheme(s))
 	utilruntime.Must(policyv1alpha1.AddToScheme(s))
