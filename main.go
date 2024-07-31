@@ -6,7 +6,7 @@ import (
 
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/bfoley13/appcontoller/pkg/controller"
+	"github.com/bfoley13/appcontroller/pkg/controller"
 )
 
 func main() {
@@ -16,5 +16,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	return mgr.Start(ctrl.SetupSignalHandler())
+	if err = mgr.Start(ctrl.SetupSignalHandler()); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

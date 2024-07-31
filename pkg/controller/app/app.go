@@ -49,4 +49,6 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 		lgr.Error(err, "unable to fetch app")
 		return ctrl.Result{}, err
 	}
+
+	return ctrl.Result{}, nil
 }
