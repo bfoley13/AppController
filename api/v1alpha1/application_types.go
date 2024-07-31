@@ -37,21 +37,8 @@ type Acr struct {
 	Id string `json:"id"`
 }
 
-type ManagedObjectReference struct {
-	Name      string `json:"name"`
-	Namespace string `json:"namespace"`
-	Kind      string `json:"kind"`
-	APIGroup  string `json:"apiGroup"`
-}
-
 type ApplicationStatus struct {
-	Conditions                    []metav1.Condition       `json:"conditions"`
-	ControllerReplicas            int32                    `json:"controllerReplicas"`
-	ControllerReadyReplicas       int32                    `json:"controllerReadyReplicas"`
-	ControllerAvailableReplicas   int32                    `json:"controllerAvailableReplicas"`
-	ControllerUnavailableReplicas int32                    `json:"controllerUnavailableReplicas"`
-	CollisionCount                int32                    `json:"collisionCount"`
-	ManagedResourceRefs           []ManagedObjectReference `json:"managedResourceRefs,omitempty"`
+	Conditions []metav1.Condition `json:"conditions"`
 }
 
 type Application struct {
