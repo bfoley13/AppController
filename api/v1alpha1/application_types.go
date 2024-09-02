@@ -15,11 +15,13 @@ func init() {
 }
 
 type ApplicationSpec struct {
-	ApplicationName string        `json:"appName"`
-	Namespace       string        `json:"namespace"`
-	Repository      *Repository   `json:"repository,omitempty"`
-	DockerConfig    *DockerConfig `json:"DockerConfig,omitempty"`
-	Acr             *Acr          `json:"ACR,omitempty"`
+	ApplicationName string              `json:"appName"`
+	Namespace       string              `json:"namespace"`
+	Repository      *Repository         `json:"repository,omitempty"`
+	DockerConfig    *DockerConfig       `json:"DockerConfig,omitempty"`
+	Acr             *Acr                `json:"ACR,omitempty"`
+	Resources       *ResourceDefinition `json:"resourceDefinition,omitempty"`
+	AppPort         string              `json:"appPort"`
 }
 
 type Repository struct {
@@ -31,10 +33,19 @@ type Repository struct {
 type DockerConfig struct {
 	Dockerfile   string `json:"dockerfile"`
 	BuildContext string `json:"buildContext"`
+	ImageName    string `json:"imageName"`
+	ImageTag     string `json:"imageTag"`
 }
 
 type Acr struct {
 	Id string `json:"id"`
+}
+
+type ResourceDefinition struct {
+	CPULimit string `json:"cpuLimit"`
+	MEMLimit string `json:"memLimit"`
+	CPUReq   string `json:"cpuReq"`
+	MEMReq   string `json:"memReq"`
 }
 
 type ApplicationStatus struct {
