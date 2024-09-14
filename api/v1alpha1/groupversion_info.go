@@ -1,6 +1,5 @@
-// Package v1alpha1 contains API Schema definitions for the approuting v1alpha1 API group
 // +kubebuilder:object:generate=true
-// +groupName=approuting.kubernetes.azure.com
+// +groupName=devx.kubernetes.azure.com
 package v1alpha1
 
 import (

@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 
 	appv1apha1 "github.com/bfoley13/appcontroller/api/v1alpha1"
+	"github.com/bfoley13/appcontroller/pkg/controller/app"
 	"github.com/go-logr/logr"
 	cfgv1alpha2 "github.com/openservicemesh/osm/pkg/apis/config/v1alpha2"
 	policyv1alpha1 "github.com/openservicemesh/osm/pkg/apis/policy/v1alpha1"
 	ubzap "go.uber.org/zap"
-	"gopkg.in/yaml.v2"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	k8serr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -22,8 +22,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-	"sigs.k8s.io/controller-runtime/pkg/manager"
 	secv1 "sigs.k8s.io/secrets-store-csi-driver/apis/v1"
+	"sigs.k8s.io/yaml"
 )
 
 const (
@@ -34,6 +34,7 @@ var scheme = runtime.NewScheme()
 
 func init() {
 	registerSchemes(scheme)
+	ctrl.SetLogger(getLogger())
 	// need to set klog logger to same logger to get consistent logging format for all logs.
 	// without this things like leader election that use klog will not have the same format.
 	// https://github.com/kubernetes/client-go/blob/560efb3b8995da3adcec09865ca78c1ddc917cc9/tools/leaderelection/leaderelection.go#L250
@@ -57,13 +58,13 @@ func registerSchemes(s *runtime.Scheme) {
 	utilruntime.Must(apiextensionsv1.AddToScheme(s))
 }
 
-func NewManager() (manager.Manager, error) {
+func NewManager() (ctrl.Manager, error) {
 	cfg, err := config.GetConfig()
 	if err != nil {
 		os.Exit(1)
 	}
 
-	mgr, err := manager.New(cfg, manager.Options{
+	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
 		Scheme: scheme,
 	})
 	if err != nil {
@@ -81,6 +82,11 @@ func NewManager() (manager.Manager, error) {
 	if err = loadCRDs(cl, setupLog); err != nil {
 		setupLog.Error(err, "unable to load crds")
 		return nil, fmt.Errorf("loading crds: %w", err)
+	}
+
+	if err = app.NewReconciler(mgr); err != nil {
+		setupLog.Error(err, "unable to create app reconciler")
+		return nil, fmt.Errorf("creating app reconciler: %w", err)
 	}
 
 	return mgr, nil
@@ -118,7 +124,7 @@ func loadCRDs(c client.Client, log logr.Logger) error {
 
 		log.Info("upserting crd")
 		ctx := context.Background()
-		err = c.Patch(ctx, crd, client.Merge, client.FieldOwner("aks-app-controller"), client.ForceOwnership)
+		err = c.Patch(ctx, crd, client.Apply, client.FieldOwner("aks-app-controller"), client.ForceOwnership)
 		if k8serr.IsNotFound(err) {
 			err = c.Create(ctx, crd)
 		}
