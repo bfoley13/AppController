@@ -6,6 +6,8 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  annotations:
+    azure.workload.identity/client-id: "955b0b3a-8df1-4a88-bce2-2198eb80a0aa"
   name: app-controller-sa
   namespace: app-controller
 ---
@@ -27,6 +29,8 @@ kind: Deployment
 metadata:
   name: app-controller
   namespace: app-controller
+  labels:
+    azure.workload.identity/use: "true"
 spec:
   replicas: 1
   strategy:
@@ -38,6 +42,7 @@ spec:
     metadata:
       labels:
         app: app-controller
+        azure.workload.identity/use: "true"
     spec:
       terminationGracePeriodSeconds: 30
       containers:
@@ -53,4 +58,9 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
+          env:
+          - name: AZURE_CLIENT_ID
+            value: "955b0b3a-8df1-4a88-bce2-2198eb80a0aa"
+          - name: AZURE_TENANT_ID
+            value: "72f988bf-86f1-41af-91ab-2d7cd011db47"
       serviceAccountName: app-controller-sa

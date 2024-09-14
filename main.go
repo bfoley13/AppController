@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	ctrl "sigs.k8s.io/controller-runtime"
-
 	"github.com/bfoley13/appcontroller/pkg/controller"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 func main() {
