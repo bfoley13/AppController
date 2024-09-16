@@ -42,7 +42,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: controller
-          image: appcontrollertest.azurecr.io/appcontroller@sha256:43a4c679e2512b42b754b85745dbc19d13cb8f56a820a0cddb8816307bf88bf6
+          image: appcontrollertest.azurecr.io/appcontroller@sha256:db8bf9799139558d8f175b521cb71a5050fa4d1e2d68969b1dd1f4fdb80f509d
           imagePullPolicy: IfNotPresent
           command:
             - ./app-controller

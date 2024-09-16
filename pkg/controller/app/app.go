@@ -79,7 +79,9 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 		return ctrl.Result{}, err
 	}
 
-	fileWriter := TemplateFiles{}
+	fileWriter := &TemplateFiles{
+		Files: map[string][]byte{},
+	}
 	deploymentTemplate, err := template.GetTemplate("Deployment", "0.0.4", ".", fileWriter)
 	if err != nil {
 		lgr.Error(err, "unable to get deployment template")
