@@ -130,10 +130,21 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 	deploymentTemplate.Config.SetVariable("NAMESPACE", app.Spec.Namespace)
 	deploymentTemplate.Config.SetVariable("IMAGENAME", fmt.Sprintf("%s/%s", *runResp.Properties.OutputImages[0].Registry, *runResp.Properties.OutputImages[0].Repository))
 	deploymentTemplate.Config.SetVariable("IMAGETAG", *runResp.Properties.OutputImages[0].Tag)
-	deploymentTemplate.Config.SetVariable("CPULIMIT", app.Spec.Resources.CPULimit)
-	deploymentTemplate.Config.SetVariable("MEMLIMIT", app.Spec.Resources.MEMLimit)
-	deploymentTemplate.Config.SetVariable("CPUREQ", app.Spec.Resources.CPUReq)
-	deploymentTemplate.Config.SetVariable("MEMREQ", app.Spec.Resources.MEMReq)
+
+	if app.Spec.Resources != nil {
+		if app.Spec.Resources.CPULimit != "" {
+			deploymentTemplate.Config.SetVariable("CPULIMIT", app.Spec.Resources.CPULimit)
+		}
+		if app.Spec.Resources.MEMLimit != "" {
+			deploymentTemplate.Config.SetVariable("MEMLIMIT", app.Spec.Resources.MEMLimit)
+		}
+		if app.Spec.Resources.CPUReq != "" {
+			deploymentTemplate.Config.SetVariable("CPUREQ", app.Spec.Resources.CPUReq)
+		}
+		if app.Spec.Resources.MEMReq != "" {
+			deploymentTemplate.Config.SetVariable("MEMREQ", app.Spec.Resources.MEMReq)
+		}
+	}
 
 	err = deploymentTemplate.CreateTemplates()
 	if err != nil {
