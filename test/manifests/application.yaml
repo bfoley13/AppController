@@ -10,7 +10,7 @@ spec:
     owner: bfoley13
     name: go_echo
     branchName: main
-  appPort: "80"
+  appPort: "1323"
   dockerConfig:
     dockerfile: "Dockerfile"
     buildContext: "."

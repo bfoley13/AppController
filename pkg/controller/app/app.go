@@ -101,8 +101,6 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 		return ctrl.Result{}, err
 	}
 
-<<<<<<< HEAD
-=======
 	runResp, err := RunAcrBuild(ctx, app)
 	if err != nil {
 		lgr.Error(err, "unable to run acr build")
@@ -114,7 +112,6 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 		return ctrl.Result{}, err
 	}
 
->>>>>>> c44d3d3 (update readme)
 	fileWriter := &TemplateFiles{
 		Files: map[string][]byte{},
 	}
@@ -130,21 +127,10 @@ func (ar *appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (res c
 	deploymentTemplate.Config.SetVariable("NAMESPACE", app.Spec.Namespace)
 	deploymentTemplate.Config.SetVariable("IMAGENAME", fmt.Sprintf("%s/%s", *runResp.Properties.OutputImages[0].Registry, *runResp.Properties.OutputImages[0].Repository))
 	deploymentTemplate.Config.SetVariable("IMAGETAG", *runResp.Properties.OutputImages[0].Tag)
-
-	if app.Spec.Resources != nil {
-		if app.Spec.Resources.CPULimit != "" {
-			deploymentTemplate.Config.SetVariable("CPULIMIT", app.Spec.Resources.CPULimit)
-		}
-		if app.Spec.Resources.MEMLimit != "" {
-			deploymentTemplate.Config.SetVariable("MEMLIMIT", app.Spec.Resources.MEMLimit)
-		}
-		if app.Spec.Resources.CPUReq != "" {
-			deploymentTemplate.Config.SetVariable("CPUREQ", app.Spec.Resources.CPUReq)
-		}
-		if app.Spec.Resources.MEMReq != "" {
-			deploymentTemplate.Config.SetVariable("MEMREQ", app.Spec.Resources.MEMReq)
-		}
-	}
+	deploymentTemplate.Config.SetVariable("CPULIMIT", app.Spec.Resources.CPULimit)
+	deploymentTemplate.Config.SetVariable("MEMLIMIT", app.Spec.Resources.MEMLimit)
+	deploymentTemplate.Config.SetVariable("CPUREQ", app.Spec.Resources.CPUReq)
+	deploymentTemplate.Config.SetVariable("MEMREQ", app.Spec.Resources.MEMReq)
 
 	err = deploymentTemplate.CreateTemplates()
 	if err != nil {
@@ -241,7 +227,7 @@ func NewRestConfig() *rest.Config {
 // }
 
 func RunAcrBuild(ctx context.Context, app appv1alpha1.Application) (*armcontainerregistry.RunsClientGetResponse, error) {
-	lgr := log.FromContext(ctx, "appcontroller-acrbuild")
+	lgr := log.FromContext(ctx)
 	acrClient, err := azure.NewACRClient(ctx)
 	if err != nil {
 		lgr.Error(err, "unable to create devhub client")
