@@ -7,7 +7,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    azure.workload.identity/client-id: "955b0b3a-8df1-4a88-bce2-2198eb80a0aa"
+    azure.workload.identity/client-id: "021fac2b-233f-42df-8f4c-3a9ec03ba51c"
   name: app-controller-sa
   namespace: app-controller
 ---
@@ -47,7 +47,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: controller
-          image: appcontrollertest.azurecr.io/appcontroller@sha256:37975ff4f6d20f673cbd0861ea3801356b8dd020a47f9910581a12041dd864fe
+          image: brfoletest.azurecr.io/appcontroller@sha256:f16abb484192cf45c985fe21203c0453fa3f28af9f88c9414b4bb89edf505750
           imagePullPolicy: IfNotPresent
           command:
             - ./app-controller
@@ -60,7 +60,7 @@ spec:
               memory: "1Gi"
           env:
           - name: AZURE_CLIENT_ID
-            value: "955b0b3a-8df1-4a88-bce2-2198eb80a0aa"
+            value: "021fac2b-233f-42df-8f4c-3a9ec03ba51c"
           - name: AZURE_TENANT_ID
             value: "72f988bf-86f1-41af-91ab-2d7cd011db47"
       serviceAccountName: app-controller-sa

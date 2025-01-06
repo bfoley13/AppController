@@ -17,7 +17,7 @@ spec:
     imageName: "go_echo"
     imageTag: "latest"
   acr:
-    id: "/subscriptions/26ad903f-2330-429d-8389-864ac35c4350/resourceGroups/bfoley-test/providers/Microsoft.ContainerRegistry/registries/appcontrollertest"
+    id: "/subscriptions/26ad903f-2330-429d-8389-864ac35c4350/resourceGroups/brfole-test/providers/Microsoft.ContainerRegistry/registries/brfoleytest"
   resourceDefinition:
     cpuLimit: "1"
     cpuReq: "1"
