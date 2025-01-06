@@ -3,7 +3,7 @@ RESOURCE_GROUP=brfole-test
 CLUSTER_NAME=brfole-test-cluster
 ACR_NAME=brfoletest
 MSI_NAME=app-controller-msi
-SUBSCRIPTION=
+SUBSCRIPTION=26ad903f-2330-429d-8389-864ac35c4350
 SERVICE_ACCOUNT_NAMESPACE=app-controller
 SERVICE_ACCOUNT_NAME=app-controller-sa
 FEDERATED_IDENTITY_CREDENTIAL_NAME=app-controller-fic
@@ -61,5 +61,3 @@ test-image-push:
 	az acr login --name $(ACR_NAME)
 	docker build -t $(ACR_NAME).azurecr.io/appcontroller .
 	docker push $(ACR_NAME).azurecr.io/appcontroller
-
-	/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635
